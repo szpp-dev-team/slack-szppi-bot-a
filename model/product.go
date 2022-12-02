@@ -6,3 +6,7 @@ type Product struct { // amazonの商品ひとつの情報
 	isPrime           bool
 	ThumbnailImageURL string
 }
+
+type ScrapeResult struct {
+	Products []Product
+}
