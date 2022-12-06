@@ -3,12 +3,16 @@ module github.com/szpp-dev-team/szpp-slack-bot
 go 1.19
 
 require (
+	github.com/dustin/go-humanize v1.0.0
 	github.com/slack-go/slack v0.11.3
 	google.golang.org/api v0.98.0
 )
 
+require github.com/antchfx/xpath v1.2.1 // indirect
+
 require (
 	cloud.google.com/go/compute v1.7.0 // indirect
+	github.com/antchfx/htmlquery v1.2.5
 	github.com/golang/groupcache v0.0.0-20200121045136-8c9f03a8e57e // indirect
 	github.com/golang/protobuf v1.5.2 // indirect
 	github.com/google/uuid v1.3.0 // indirect
