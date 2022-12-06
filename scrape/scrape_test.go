@@ -15,6 +15,7 @@ func TestScrape(t *testing.T) {
 
 	for i, row := range result.Products {
 		fmt.Println(strconv.Itoa(i) + ": ")
+		fmt.Println(row.Asin)
 		fmt.Println(row.Name)
 		fmt.Println(row.Price)
 		fmt.Println(row.ThumbnailImageURL)
