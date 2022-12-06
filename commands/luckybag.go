@@ -7,14 +7,13 @@ import (
 
 	"github.com/slack-go/slack"
 	"github.com/szpp-dev-team/szpp-slack-bot/luckyBag"
-	"google.golang.org/api/customsearch/v1"
 )
 
 type SubHandlerLuckyBag struct {
 	c *slack.Client
 }
 
-func NewSubHandlerLuckyBag(c *slack.Client, s *customsearch.Service) *SubHandlerLuckyBag {
+func NewSubHandlerLuckyBag(c *slack.Client) *SubHandlerLuckyBag {
 	return &SubHandlerLuckyBag{c}
 }
 
