@@ -1,6 +1,7 @@
 package model
 
 type Product struct { // amazonの商品ひとつの情報
+	Asin              string
 	Name              string
 	Price             int
 	IsPrime           bool
