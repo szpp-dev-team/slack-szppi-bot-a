@@ -3,6 +3,7 @@ module github.com/szpp-dev-team/szpp-slack-bot
 go 1.19
 
 require (
+	github.com/dustin/go-humanize v1.0.0
 	github.com/slack-go/slack v0.11.3
 	google.golang.org/api v0.98.0
 )

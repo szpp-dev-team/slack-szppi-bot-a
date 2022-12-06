@@ -5,6 +5,7 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/dustin/go-humanize"
 	"github.com/slack-go/slack"
 	"github.com/szpp-dev-team/szpp-slack-bot/luckyBag"
 )
@@ -34,22 +35,25 @@ func (o *SubHandlerLuckyBag) Handle(slashCmd *slack.SlashCommand) error {
 		return err
 	}
 
-	resp := "令和最新版福袋っぴ！予算内で詰め込んだから買えっぴ！\n"
-	for _, row := range products {
-		resp += row.Name[:30]
-		if len(row.Name) > 30 {
-			resp += "..."
-		}
-		resp += "\n"
-		resp += strconv.Itoa(row.Price) + "\n"
-		resp += strconv.Itoa(row.Price) + "円"
-		if row.IsPrime {
-			resp += "(Prime配送)"
-		}
-		resp += "\n"
-	}
+	var options []slack.Block
 
-	_, _, _, err = o.c.SendMessage(slashCmd.ChannelID, slack.MsgOptionText(resp, false))
+	options = append(options, slack.NewSectionBlock(
+		slack.NewTextBlockObject("mrkdwn", "令和最新版福袋っぴ！予算内で詰め込んだから買えっぴ！", false, false), nil, nil),
+	)
+
+	for _, row := range products {
+		options = append(options, slack.NewSectionBlock(
+			slack.NewTextBlockObject("mrkdwn", row.Name, false, false),
+			[]*slack.TextBlockObject{
+				slack.NewTextBlockObject("mrkdwn", humanize.Comma(int64(row.Price))+"円"+map[bool]string{true: "\nPrime配送", false: ""}[row.IsPrime], false, false),
+			},
+			slack.NewAccessory(
+				slack.NewImageBlockElement(row.ThumbnailImageURL, row.Name),
+			),
+		))
+		options = append(options, slack.NewDividerBlock())
+	}
+	_, _, _, err = o.c.SendMessage(slashCmd.ChannelID, slack.MsgOptionBlocks(options[:]...))
 
 	return err
 }
