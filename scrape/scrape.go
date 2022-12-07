@@ -68,17 +68,12 @@ func Scrape() (model.ScrapeResult, error) {
 		if htmlquery.SelectAttr(n, "data-asin") == "" || len(htmlquery.Find(n, "//img[@class='s-image']")) == 0 || len(htmlquery.Find(n, "//h2[@class='a-size-mini a-spacing-none a-color-base s-line-clamp-4']")) == 0 || len(htmlquery.Find(n, "//span[@class='a-price-whole']")) == 0 {
 			continue
 		}
-		// asin := htmlquery.SelectAttr(n, "data-asin")
+		asin := htmlquery.SelectAttr(n, "data-asin")
 		image_url := htmlquery.SelectAttr(htmlquery.Find(n, "//img[@class='s-image']")[0], "src")
 		title := htmlquery.InnerText(htmlquery.Find(n, "//h2[@class='a-size-mini a-spacing-none a-color-base s-line-clamp-4']")[0])
 		price, _ := strconv.Atoi(strings.Replace(strings.Replace(htmlquery.InnerText(htmlquery.Find(n, "//span[@class='a-price-whole']")[0]), "￥", "", -1), ",", "", -1))
 		is_prime := len(htmlquery.Find(n, "//i[@aria-label='Amazon プライム']")) == 1
-		// fmt.Println(asin)
-		// fmt.Println(image_url)
-		// fmt.Println(title)
-		// fmt.Println(price)
-		// fmt.Println(is_prime)
-		results.Products = append(results.Products, model.Product{Name: title, Price: price, IsPrime: is_prime, ThumbnailImageURL: image_url})
+		results.Products = append(results.Products, model.Product{Asin: asin, Name: title, Price: price, IsPrime: is_prime, ThumbnailImageURL: image_url})
 	}
 	return results, nil
 }
