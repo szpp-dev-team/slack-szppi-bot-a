@@ -35,25 +35,25 @@ func (o *SubHandlerLuckyBag) Handle(slashCmd *slack.SlashCommand) error {
 		return err
 	}
 
-	var options []slack.Block
+	var blocks []slack.Block
 
-	options = append(options, slack.NewSectionBlock(
+	blocks = append(blocks, slack.NewSectionBlock(
 		slack.NewTextBlockObject("mrkdwn", "令和最新版福袋っぴ！予算内で詰め込んだから買えっぴ！", false, false), nil, nil),
 	)
 
 	for _, row := range products {
-		options = append(options, slack.NewSectionBlock(
-			slack.NewTextBlockObject("mrkdwn", row.Name, false, false),
+		blocks = append(blocks, slack.NewSectionBlock(
+			slack.NewTextBlockObject("mrkdwn", "<https://www.amazon.co.jp/dp/"+row.Asin+"|"+row.Name+">", false, false),
 			[]*slack.TextBlockObject{
-				slack.NewTextBlockObject("mrkdwn", humanize.Comma(int64(row.Price))+"円"+map[bool]string{true: "\nPrime配送", false: ""}[row.IsPrime], false, false),
+				slack.NewTextBlockObject("mrkdwn", humanize.Comma(int64(row.Price))+"円"+map[bool]string{true: " Prime配送", false: ""}[row.IsPrime], false, false),
 			},
 			slack.NewAccessory(
 				slack.NewImageBlockElement(row.ThumbnailImageURL, row.Name),
 			),
 		))
-		options = append(options, slack.NewDividerBlock())
+		blocks = append(blocks, slack.NewDividerBlock())
 	}
-	_, _, _, err = o.c.SendMessage(slashCmd.ChannelID, slack.MsgOptionBlocks(options[:]...))
+	_, _, _, err = o.c.SendMessage(slashCmd.ChannelID, slack.MsgOptionBlocks(blocks[:]...), slack.MsgOptionDisableLinkUnfurl(), slack.MsgOptionDisableMediaUnfurl())
 
 	return err
 }
